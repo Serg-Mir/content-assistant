@@ -6,6 +6,7 @@ from content_assistant.core.models import Base
 from content_assistant.core.config.logging import logging_config
 from content_assistant.core.config.settings import get_settings
 import logging
+from typing import Any, Dict
 
 # Create a logger instance
 logger = logging.getLogger("alembic.runtime.migration")
@@ -21,7 +22,6 @@ db_url = f"postgresql://{settings.postgres_user}:{settings.postgres_password}@{s
 # Override sqlalchemy.url in alembic.ini
 config.set_main_option("sqlalchemy.url", db_url)
 
-
 dictConfig(logging_config)
 target_metadata = Base.metadata
 
@@ -31,7 +31,7 @@ def run_migrations_offline() -> None:
 
     This configures the context with just a URL
     and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
+    here as well. By skipping the Engine creation
     we don't even need a DBAPI to be available.
 
     Calls to context.execute() here emit the given string to the
@@ -59,8 +59,15 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    section = config.get_section(config.config_ini_section)
+    if not section:
+        raise ValueError("Configuration section missing")
+
+    # Cast to correct type to avoid mypy warning
+    section_dict: Dict[str, Any] = section
+
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        section_dict,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
