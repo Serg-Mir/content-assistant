@@ -114,7 +114,7 @@ The response contains the generated text encoded in UTF-16.
 
 ```json
 {
-  "generated_text": "//5BACAAbABhAGQAeQAgAGkAcwAgAGMAbwBvAGsAaQBuAGcAIABkAGkAbgBuAGUAcgAuAA=="
+  "generated_text": "b'\xff\xfeA\x00 \x00w\x00o\x00m\x00a\x00n\x00 \x00i\x00s\x00 \x00p\x00r\x00e\x00p\x00a\x00r\x00i\x00n\x00g\x00 \x00a\x00 \x00s\x00a\x00l\x00a\x00d\x00 \x00f\x00o\x00r\x00 \x00d\x00i\x00n\x00n\x00e\x00r\x00.\x00'"
 }
 ```
 Note: generated text can be found in the application log, e.g.:
