@@ -73,6 +73,8 @@ A typical Docker Compose workflow for this project includes the following contai
 - **content_assistant_nginx**: Nginx container used to centralize and load balance requests between multiple app replicas.
 - **app_{replicas}**: Application container instances, scaled to handle increased demand.
 
+> ⚠️ **Note**: During the initial build of the application, the process might be slow as it involves downloading large model files from external repositories (e.g., Hugging Face). This includes pre-trained model weights and configurations, which can significantly impact build times depending on your network speed. Please allow sufficient time for the downloads to complete successfully. You will see logs related to model downloading, like tokenizer, vocab, and safetensors, during this phase.
+
 
 
 ## Scaling with Docker Compose

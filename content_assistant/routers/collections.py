@@ -1,8 +1,6 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, status, HTTPException
 from fastapi.responses import JSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
-from content_assistant.core.db.database import get_db
 from content_assistant.schemas import TextGenerationRequest, TextGenerationResponse
 from content_assistant.core.content_generator import generate_text
 import logging
