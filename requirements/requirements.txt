@@ -1,0 +1,18 @@
+fastapi==0.115.4
+uvicorn==0.32.0
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.26.0
+transformers==4.33.2
+psycopg2-binary
+pydantic==2.9.2
+pydantic-settings==2.6.0
+huggingface-hub==0.16.4
+alembic==1.13.3
+numpy==1.24.3
+faiss-cpu==1.7.4
+scipy==1.11.3  # For vector similarity and other utilities
+setuptools==75.3.0
+httpx==0.27.2
+
+# Optional: Dependencies for faiss compilation if needed
+cython==0.29.36
