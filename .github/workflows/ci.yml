@@ -16,21 +16,23 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/requirements-dev.txt
-          pip install black==24.3.0 types-requests==2.28.11.12 mypy==1.13.0
-
+          pip install -r requirements/requirements-torch.txt
+      - name: Install mypy additional dependencies
+        run: |
+          pip install types-requests==2.28.11.12
+      - name: Install black and mypy
+        run: |
+          pip install black==24.3.0 mypy==1.13.0
       - name: Check formatting
         run: |
           black --line-length 100 --check .
-
       - name: Validate structure with mypy
         run: |
           mypy --ignore-missing-imports .
-
       - name: Run tests
         env:
           PYTHONPATH: ${{ github.workspace }}
