@@ -16,7 +16,7 @@ The Content Assistant API is a REST API service designed to generate fluent Engl
 
 - **Database Integration**: Looks up similar content in a database to enhance generated text quality.
 - **Text Generation**: Uses a pre-trained model to generate fluent English text considering the given parameters.
-- **UTF-16 Output**: Returns the generated text in UTF-16 format, encoded in Base64.
+- **UTF-16 Output**: Returns the generated text in UTF-16 format.
 
 ## Setup & Installation
 
@@ -110,7 +110,7 @@ Content-Type: application/json
 ```
 
 ### Example Response
-The response contains the generated text encoded in UTF-16 Base64.
+The response contains the generated text encoded in UTF-16.
 
 ```json
 {
@@ -121,9 +121,8 @@ Note: generated text can be found in the application log, e.g.:
 ```text
 app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text saved to database: A woman is preparing a salad for dinner.
 ```
-### Base64 Encoding of the Response
 
-> ⚠️ **Note**: The generated text is returned in Base64-encoded UTF-16 format. This encoding ensures that the data can be safely transmitted over the JSON format, which is inherently UTF-8 based. Base64 encoding helps to maintain data compatibility and prevents any potential corruption when handling non-UTF-8 characters.
+> ⚠️ **Note**: The generated text is returned in UTF-16 format. This ensures that the data can be properly transmitted, particularly for cases where special characters or non-ASCII data may be involved. UTF-16 encoding is used to preserve all character data accurately, avoiding issues with character representation and potential data corruption.
 
 
 # Further App Improvements Notes and Comments:

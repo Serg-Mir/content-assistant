@@ -7,7 +7,6 @@ from content_assistant.core.generator import embed_text
 from content_assistant.core.models import TextEntry
 import logging
 import random
-import base64
 from content_assistant.core.db.database import get_db
 
 logger = logging.getLogger("content_assistant_app")
@@ -142,7 +141,7 @@ async def generate_text(
         tone (str): The tone of the generated text (e.g., informal, formal).
 
     Returns:
-        str: The generated text encoded in UTF-16 and Base64.
+        str: The generated text encoded in UTF-16.
 
     Raises:
         ValueError: If the keywords are empty or embedding fails.
@@ -194,12 +193,11 @@ async def generate_text(
             logger.error(f"Error during text generation: {str(e)}")
             raise RuntimeError("Text generation failed.") from e
 
-        # Convert to UTF-16 before returning as Base64
+        # Convert to UTF-16
         try:
             generated_text_utf16 = generated_text.encode("utf-16")
-            base64_encoded_text = base64.b64encode(generated_text_utf16).decode("utf-8")
         except Exception as e:
-            logger.error(f"Error encoding text to UTF-16 and Base64: {str(e)}")
+            logger.error(f"Error encoding text to UTF-16: {str(e)}")
             raise RuntimeError("Failed to encode text to UTF-16.") from e
 
         # Check if the generated text already exists in the database before saving
@@ -225,4 +223,4 @@ async def generate_text(
     if attempt == max_retries:
         raise RuntimeError(f"Failed to generate a unique text after {max_retries} attempts.")
 
-    return base64_encoded_text
+    return str(generated_text_utf16)
