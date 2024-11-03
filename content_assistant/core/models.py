@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, String, Text, UniqueConstraint
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.schema import Index
 
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
 
 
 class TextEntry(Base):
@@ -14,6 +16,6 @@ class TextEntry(Base):
     tone = Column(String)
 
     __table_args__ = (
-        UniqueConstraint('content', 'domain', 'audience', 'tone', name='unique_text_entry'),
-        Index('idx_domain_audience_tone', 'domain', 'audience', 'tone')
+        UniqueConstraint("content", "domain", "audience", "tone", name="unique_text_entry"),
+        Index("idx_domain_audience_tone", "domain", "audience", "tone"),
     )

@@ -5,18 +5,15 @@ from typing import Optional
 from fastapi import Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
-
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
-
 
 logger = logging.getLogger(__name__)
 
 
 class AppExceptionCase(Exception):
-    def __init__(self, status_code: int, context: Optional[dict]):
+    def __init__(self, status_code: int, context: Optional[dict] = None):
         super().__init__()
-
         self.exception_case = self.__class__.__name__
         self.status_code = status_code
         self.context = context
@@ -29,21 +26,21 @@ class AppExceptionCase(Exception):
 
 
 class RequestError(AppExceptionCase):
-    def __init__(self, context: dict = None):
+    def __init__(self, context: Optional[dict] = None):
         """Invalid request from user."""
         status_code = status.HTTP_400_BAD_REQUEST
         AppExceptionCase.__init__(self, status_code, context)
 
 
 class ResourceNotFoundError(AppExceptionCase):
-    def __init__(self, context: dict = None):
+    def __init__(self, context: Optional[dict] = None):
         """The resource requested by the user does not exist."""
         status_code = status.HTTP_404_NOT_FOUND
         AppExceptionCase.__init__(self, status_code, context)
 
 
 class ResourceConflictError(AppExceptionCase):
-    def __init__(self, context: dict = None):
+    def __init__(self, context: Optional[dict] = None):
         """The resource the user tried to create already exists."""
         status_code = status.HTTP_409_CONFLICT
         AppExceptionCase.__init__(self, status_code, context)
@@ -54,7 +51,6 @@ def caller_info() -> str:
     return f"{info.filename}:{info.function}:{info.lineno}"
 
 
-# pylint: disable=unused-argument
 async def app_exception_handler(request: Request, exc: AppExceptionCase):
     logger.error("%s | caller=%s", exc, caller_info())
     return JSONResponse(
@@ -63,12 +59,10 @@ async def app_exception_handler(request: Request, exc: AppExceptionCase):
     )
 
 
-# pylint: disable=unused-argument
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
     return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
 
 
-# pylint: disable=unused-argument
 async def request_validation_exception_handler(
     request: Request, exc: RequestValidationError
 ) -> JSONResponse:

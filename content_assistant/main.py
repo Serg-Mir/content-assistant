@@ -32,7 +32,9 @@ def create_app() -> FastAPI:
         return await request_validation_exception_handler(request, e)
 
     api_router = APIRouter()
-    api_router.include_router(collections_router, prefix="/collections", tags=["content_generation"])
+    api_router.include_router(
+        collections_router, prefix="/collections", tags=["content_generation"]
+    )
     api_router.include_router(health_router, prefix="/health", tags=["health"])
     app.include_router(api_router)
 

@@ -36,11 +36,11 @@ async def fetch_similar_texts_from_db(db: AsyncSession, domain: str, audience: s
         RuntimeError: If the database query fails.
     """
     try:
-        result = await db.execute(select(TextEntry).where(
-            TextEntry.domain == domain,
-            TextEntry.audience == audience,
-            TextEntry.tone == tone
-        ))
+        result = await db.execute(
+            select(TextEntry).where(
+                TextEntry.domain == domain, TextEntry.audience == audience, TextEntry.tone == tone
+            )
+        )
         return result.scalars().all()
     except Exception as e:
         logger.error(f"Database query error: {str(e)}")
@@ -63,7 +63,9 @@ def search_similar_texts_in_faiss(query_embedding, db_texts):
     """
     if db_texts:
         try:
-            db_embeddings = np.array([embed_text(text.content) for text in db_texts]).astype("float32")
+            db_embeddings = np.array([embed_text(text.content) for text in db_texts]).astype(
+                "float32"
+            )
             if db_embeddings.size > 0:
                 index.reset()
                 index.add(db_embeddings)
@@ -105,13 +107,15 @@ def prepare_prompt(keywords, domain, word_count, audience, tone, retrieved_text=
     """
     if retrieved_text:
         improvement_instruction = random.choice(
-            ["improve it or make it more unique",
-             "Rewrite the following to make it more compelling for the target audience",
-             "Paraphrase and expand the text while keeping the tone consistent"]
+            [
+                "improve it or make it more unique",
+                "Rewrite the following to make it more compelling for the target audience",
+                "Paraphrase and expand the text while keeping the tone consistent",
+            ]
         )
         prompt = (
             f"{improvement_instruction}. "
-            f"Current text: \"{retrieved_text}\". "
+            f'Current text: "{retrieved_text}". '
             f"Make sure the tone remains {tone} and suitable for a {audience}. "
             f"Keywords to include: {', '.join(keywords)}. It should be around {word_count} words long."
         )
@@ -125,11 +129,7 @@ def prepare_prompt(keywords, domain, word_count, audience, tone, retrieved_text=
 
 
 async def generate_text(
-        keywords: list[str],
-        domain: str,
-        word_count: int,
-        audience: str,
-        tone: str
+    keywords: list[str], domain: str, word_count: int, audience: str, tone: str
 ) -> str:
     """
     Generate or improve text based on keywords, domain, audience, and tone.
@@ -158,7 +158,9 @@ async def generate_text(
     try:
         query_embedding = embed_text(keyword_string).astype("float32")
         if query_embedding.shape[0] != INDEX_DIMENSION:
-            raise ValueError(f"Unexpected embedding dimension: {query_embedding.shape[0]}. Expected {INDEX_DIMENSION}.")
+            raise ValueError(
+                f"Unexpected embedding dimension: {query_embedding.shape[0]}. Expected {INDEX_DIMENSION}."
+            )
     except Exception as e:
         logger.error(f"Error embedding keywords: {str(e)}")
         raise ValueError("Failed to embed keywords.") from e
@@ -185,7 +187,7 @@ async def generate_text(
                 max_new_tokens=int(word_count * 2),  # Adjust for expected word length
                 temperature=0.7,  # Controls randomness. Higher values generate more random text
                 top_p=0.9,  # Controls nucleus sampling. Adjust for more focused output
-                do_sample=True  # Enables sampling for more diverse outputs
+                do_sample=True,  # Enables sampling for more diverse outputs
             )
             generated_text = response[0]["generated_text"]
         except Exception as e:
@@ -194,8 +196,8 @@ async def generate_text(
 
         # Convert to UTF-16 before returning as Base64
         try:
-            generated_text_utf16 = generated_text.encode('utf-16')
-            base64_encoded_text = base64.b64encode(generated_text_utf16).decode('utf-8')
+            generated_text_utf16 = generated_text.encode("utf-16")
+            base64_encoded_text = base64.b64encode(generated_text_utf16).decode("utf-8")
         except Exception as e:
             logger.error(f"Error encoding text to UTF-16 and Base64: {str(e)}")
             raise RuntimeError("Failed to encode text to UTF-16.") from e
@@ -205,10 +207,7 @@ async def generate_text(
             async with get_db() as db:
                 try:
                     new_text_entry = TextEntry(
-                        content=generated_text,
-                        domain=domain,
-                        audience=audience,
-                        tone=tone
+                        content=generated_text, domain=domain, audience=audience, tone=tone
                     )
                     db.add(new_text_entry)
                     await db.commit()
@@ -218,7 +217,9 @@ async def generate_text(
                     logger.error(f"Error saving generated text to the database: {str(e)}")
                     raise RuntimeError("Failed to save generated text.") from e
         else:
-            logger.info("Generated text already exists in the database. Retrying with adjusted prompt.")
+            logger.info(
+                "Generated text already exists in the database. Retrying with adjusted prompt."
+            )
             attempt += 1
 
     if attempt == max_retries:

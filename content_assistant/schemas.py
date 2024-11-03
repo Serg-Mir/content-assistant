@@ -13,8 +13,4 @@ class TextGenerationResponse(BaseModel):
     generated_text: str  # Base64 encoded UTF-16
 
     class Config:
-        json_schema_extra = {
-            "example": {
-                "generated_text": "BASE64_ENCODED_STRING_HERE"
-            }
-        }
+        json_schema_extra = {"example": {"generated_text": "BASE64_ENCODED_STRING_HERE"}}

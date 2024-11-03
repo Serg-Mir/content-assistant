@@ -66,6 +66,14 @@ The Content Assistant API is a REST API service designed to generate fluent Engl
   ```bash
   docker-compose up
   ```
+### Flow
+A typical Docker Compose workflow for this project includes the following containers:
+- **content_assistant_db**: PostgreSQL database initialized with credentials defined in the `.env` file.
+- **content_assistant_migrations**: Applies the latest migrations to the database using `alembic upgrade head`.
+- **content_assistant_nginx**: Nginx container used to centralize and load balance requests between multiple app replicas.
+- **app_{replicas}**: Application container instances, scaled to handle increased demand.
+
+
 
 ## Scaling with Docker Compose
 * **Container Replicas**: The number of container replicas for the API service can be modified in the docker-compose.yml file to enhance scalability and handle more concurrent requests. To change the number of replicas, locate relevant section in the docker-compose.yml and adjust the replicas value:
@@ -106,7 +114,7 @@ The response contains the generated text encoded in UTF-16 Base64.
   "generated_text": "<base64_encoded_text>"
 }
 ```
-Note: generated text can be found in the application log, e.g.: 
+Note: generated text can be found in the application log, e.g.:
 ```text
 app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text saved to database: A woman is preparing a salad for dinner.
 ```
@@ -193,6 +201,18 @@ app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text 
 
 - **Latency & Concurrency**: Implement rate limiting and use an API gateway to manage high loads.
 - **Auto-Scaling**: Set up Kubernetes Horizontal Pod Autoscaler (HPA) for dynamic scaling based on demand.
+
+## Contributing
+
+Before starting to contribute, please install `pre-commit` to ensure your changes are checked for style and standards before committing them to the repository:
+
+    $ pre-commit install
+
+[pre-commit](https://pre-commit.com) is installed automatically in development environment by pip.
+If you are running the Docker setup, please install it with `pip` in your host machine:
+
+    $ pip install pre-commit
+
 
 ## License
 

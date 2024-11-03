@@ -12,7 +12,9 @@ logger = logging.getLogger("content_assistant_app")
 router = APIRouter()
 
 
-@router.post("/generate_text", response_model=TextGenerationResponse, status_code=status.HTTP_200_OK)
+@router.post(
+    "/generate_text", response_model=TextGenerationResponse, status_code=status.HTTP_200_OK
+)
 async def generate_text_endpoint(request: TextGenerationRequest):
     """
     Endpoint to generate text based on user input.
@@ -21,7 +23,7 @@ async def generate_text_endpoint(request: TextGenerationRequest):
         request (TextGenerationRequest): The input request containing keywords, domain, audience, tone, and word count.
 
     Returns:
-        JSONResponse: A response containing the generated text or an error message.
+        JSONResponse: A response containing the text in UTF16 format or an error message.
 
     Raises:
         HTTPException: If any error occurs during processing.
@@ -33,13 +35,15 @@ async def generate_text_endpoint(request: TextGenerationRequest):
             domain=request.domain,
             word_count=request.word_count,
             audience=request.audience,
-            tone=request.tone
+            tone=request.tone,
         )
         return JSONResponse(content={"generated_text": generated_text})
 
     except SQLAlchemyError as e:
         logger.error(f"Database error occurred: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="A database error occurred.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="A database error occurred."
+        )
 
     except ValueError as e:
         logger.warning(f"Validation error: {str(e)}")
@@ -47,4 +51,7 @@ async def generate_text_endpoint(request: TextGenerationRequest):
 
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred.",
+        )

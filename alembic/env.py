@@ -1,14 +1,14 @@
 from logging.config import dictConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from alembic import context
+from alembic import context  # type: ignore
 from content_assistant.core.models import Base
 from content_assistant.core.config.logging import logging_config
 from content_assistant.core.config.settings import get_settings
 import logging
 
 # Create a logger instance
-logger = logging.getLogger('alembic.runtime.migration')
+logger = logging.getLogger("alembic.runtime.migration")
 
 # Get settings instance
 settings = get_settings()

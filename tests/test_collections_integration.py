@@ -17,7 +17,7 @@ async def test_integration_trigger_generate_text(mock_trigger_generate_text):
         "domain": "test_domain",
         "word_count": 100,
         "audience": "test_audience",
-        "tone": "test_tone"
+        "tone": "test_tone",
     }
     response = client.post("/collections/generate_text", json=request_data)
 
