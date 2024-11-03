@@ -1,4 +1,5 @@
 # Content Assistant API - README
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/serg-mir/content-assistant/ci.yml?branch=main&style=for-the-badge)
 
 ## Overview
 
@@ -113,13 +114,17 @@ The response contains the generated text encoded in UTF-16 Base64.
 
 ```json
 {
-  "generated_text": "<base64_encoded_text>"
+  "generated_text": "//5BACAAbABhAGQAeQAgAGkAcwAgAGMAbwBvAGsAaQBuAGcAIABkAGkAbgBuAGUAcgAuAA=="
 }
 ```
 Note: generated text can be found in the application log, e.g.:
 ```text
 app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text saved to database: A woman is preparing a salad for dinner.
 ```
+### Base64 Encoding of the Response
+
+> ⚠️ **Note**: The generated text is returned in Base64-encoded UTF-16 format. This encoding ensures that the data can be safely transmitted over the JSON format, which is inherently UTF-8 based. Base64 encoding helps to maintain data compatibility and prevents any potential corruption when handling non-UTF-8 characters.
+
 
 # Further App Improvements Notes and Comments:
 
