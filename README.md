@@ -43,14 +43,14 @@ The Content Assistant API is a REST API service designed to generate fluent Engl
    ````
 
 3. **Install Dependencies**:
-   - Install all dependencies using `pip`:
+   - Install all dependencies using `pip` to run locally:
      ```bash
      pip install -r requirements/requirements.txt
      pip install -r requirements/requirements-torch.txt
      ```
 
 4. **Run Docker Compose**:
-   - To set up the entire infrastructure including the database, API server, and other services(highly advised):
+   - To automatically set up the entire infrastructure including the database, API server, and other services(advised):
      ```bash
      docker-compose up --build
      ```
@@ -62,7 +62,7 @@ The Content Assistant API is a REST API service designed to generate fluent Engl
   uvicorn content_assistant.main:app --host 0.0.0.0 --port 8000 --reload
   ```
 
-- **Dockerized Environment**: To start the application with Docker Compose(highly advised), run:
+- **Dockerized Environment**: To start the application with Docker Compose(advised), run:
   ```bash
   docker-compose up
   ```
@@ -100,11 +100,11 @@ POST /generate-text
 Content-Type: application/json
 
 {
-  "keywords": ["bread", "milk"],
+  "keywords": ["human", "salad"],
   "domain": "e-commerce",
   "word_count": 10,
   "audience": "consumer",
-  "tone": "playful"
+  "tone": "informal"
 }
 ```
 
