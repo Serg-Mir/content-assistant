@@ -67,6 +67,12 @@ The Content Assistant API is a REST API service designed to generate fluent Engl
   ```bash
   docker-compose up
   ```
+    > **ℹ️ Info:**
+  > Nginx acts as a reverse proxy to handle requests between multiple app replicas, ensuring efficient load balancing.
+  >
+  > Once the application is running, the API will be accessible locally at [http://127.0.0.1:80](http://127.0.0.1:80).
+  >
+  > The interactive FastAPI documentation (Swagger UI) will be available at [http://127.0.0.1/docs#/](http://127.0.0.1/docs#/).
 ### Flow
 A typical Docker Compose workflow for this project includes the following containers:
 - **content_assistant_db**: PostgreSQL database initialized with credentials defined in the `.env` file.
