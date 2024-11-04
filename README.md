@@ -131,7 +131,15 @@ app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text 
 
 - **Quality Evaluation**:
   - **Human Evaluation**: Domain experts assess the coherence, grammar, and relevance of the generated content. This provides qualitative feedback that ensures the generated text meets industry standards and user expectations.
-  - **Automated Scoring**: Metrics like BLEU or ROUGE could be used for scoring fluency and relevance. BLEU scores can compare the generated text to reference examples, while ROUGE can evaluate the overlap of n-grams between the generated and reference texts, ensuring a quantitative measure of content quality. For example, BLEU scores can be used to compare generated text with reference texts to evaluate how well the model is performing.
+  - **Automated Scoring**: Metrics like BLEU or ROUGE could be used for scoring fluency and relevance. BLEU scores can compare the generated text to reference examples, while ROUGE can evaluate the overlap of n-grams between the generated and reference texts, ensuring a quantitative measure of content quality. For example, BLEU scores can be used to compare generated text with reference texts to evaluate how well the model is performing. For example:
+```python
+from nltk.translate.bleu_score import sentence_bleu
+
+reference = [["the", "woman", "is", "preparing", "a", "salad"]]
+candidate = ["the", "woman", "prepares", "a", "salad"]
+score = sentence_bleu(reference, candidate)
+print(f"BLEU score: {score}")
+```
 
 - **Optimization Strategies**:
   - **Inference Speed**: Apply quantization and batch processing to improve response time. Quantization helps by reducing the model's precision without significantly affecting quality, thus speeding up inference.
@@ -141,7 +149,6 @@ app_1  | [2024-11-03 18:36:22,232] INFO [content_assistant_app]: Generated text 
 
 - **Model Scaling**: Retrain the model using diverse datasets to support new parameters and additional languages. For instance, expanding the training dataset with multi-domain and multilingual texts can significantly enhance the model's versatility and accuracy across different content scenarios.
 - **Auto-Scaling**: Use Kubernetes or AWS Fargate for automated scaling based on traffic demands. This ensures that the infrastructure can grow dynamically with user requests, preventing downtime and maintaining consistent service quality.
-- **Auto-Scaling**: Use Kubernetes or AWS Fargate for automated scaling based on traffic demands.
 
 ### Deployment Options
 
